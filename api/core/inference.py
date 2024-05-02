@@ -11,7 +11,7 @@ from .explaination import create_shap, get_shap_url
 
 IMG_SIZE = 224
 
-model : keras.Model = keras.models.load_model(r'.\api\cnn-models\skin-cancer-7-classes_CustomModel_ph2_model.h5')
+model : keras.Model = keras.models.load_model(r'.\api\cnn-models\skin-cancer-7-classes_EfficientNetB3_ph2_model.h5')
 model.trainable = False
 model.summary()
 
@@ -50,12 +50,15 @@ def predict(file):
     
     x = np.expand_dims(img, axis=0)
     probs = model.predict(x)[0]
+    label_id = np.argmax(probs)
+    label_type = list(filter(lambda items: classes[label_id] in items[-1], classes_group_dict.items()))[0][0]
     
     shap_id = create_shap(model, x, "unknown", classes)
     
     results = {
         'class_dict': classes_dict,
-        'label': classes[np.argmax(probs)],
+        'label': classes[label_id],
+        'type': label_type,
         'confidence': np.max(probs),
         'probs': { classes[i]: prob for i, prob in enumerate(probs) },
         'shap_id': shap_id
