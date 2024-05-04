@@ -1,17 +1,15 @@
 import os
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
-import tensorflow as tf
 import keras
 import cv2
-import matplotlib.pyplot as plt
 import numpy as np
 
-from .explaination import create_shap, get_shap_url
+from .explaination import create_shap
 
 IMG_SIZE = 224
 
-model : keras.Model = keras.models.load_model(r'.\api\cnn-models\skin-cancer-7-classes_EfficientNetB3_ph2_model.h5')
+model : keras.Model = keras.models.load_model(r'.\api\cnn-models\skin-cancer-7-classes_MobileNet_ph2_model.h5')
 model.trainable = False
 model.summary()
 
