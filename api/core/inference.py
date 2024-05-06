@@ -6,10 +6,11 @@ import cv2
 import numpy as np
 
 from .explaination import create_shap
+from .k_mean_segmentation import create_segmented_mask
 
 IMG_SIZE = 224
 
-model : keras.Model = keras.models.load_model(r'.\api\cnn-models\skin-cancer-7-classes_MobileNet_ph2_model.h5')
+model : keras.Model = keras.models.load_model(r'.\api\cnn-models\skin-cancer-7-classes_MobileNet_v18_model.h5')
 model.trainable = False
 model.summary()
 
@@ -52,6 +53,7 @@ def predict(file):
     label_type = list(filter(lambda items: classes[label_id] in items[-1], classes_group_dict.items()))[0][0]
     
     shap_id = create_shap(model, x, "unknown", classes)
+    segmented_img_url = create_segmented_mask(shap_id, x[0])
     
     results = {
         'class_dict': classes_dict,
@@ -59,7 +61,8 @@ def predict(file):
         'type': label_type,
         'confidence': np.max(probs),
         'probs': { classes[i]: prob for i, prob in enumerate(probs) },
-        'shap_id': shap_id
+        'shap_id': shap_id,
+        'kmean_segmentation_url': segmented_img_url
     }
     
     return results
