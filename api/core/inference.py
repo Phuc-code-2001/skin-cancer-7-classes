@@ -25,8 +25,8 @@ classes_dict = {
 }
 
 classes_group_dict = {
-    'dangerous': ['mel', 'akiec'],
-    'non-dangerous': ['bkl', 'nv', 'df', 'vasc', 'bcc']
+    'malignant': ['mel', 'akiec', 'bcc'],
+    'benign': ['bkl', 'nv', 'df', 'vasc']
 }
 
 classes = [
